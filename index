@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>편리한가계부의시작</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Inter 폰트를 사용합니다. */
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* 탭 버튼 스타일 */
+        .tab-button {
+            @apply px-4 py-2 rounded-t-lg font-semibold text-gray-600 hover:bg-gray-200 transition-colors duration-200;
+        }
+        .tab-button.active {
+            @apply bg-white text-blue-600 border-b-2 border-blue-600;
+        }
+        .tab-content {
+            @apply p-6 bg-white rounded-b-lg shadow-lg;
+        }
+        /* 폼 레이아웃 개선 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.25rem; /* 20px */
+        }
+        .form-grid > div {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-grid .full-width {
+            grid-column: 1 / -1; /* Full width for description and button */
+        }
+        /* 공통 테이블 스타일 */
+        .data-table {
+            @apply w-full text-left border-collapse;
+        }
+        .data-table th, .data-table td {
+            @apply p-3 border-b border-gray-200;
+        }
+        .data-table th {
+            @apply bg-gray-100 font-semibold text-gray-700;
+        }
+        .data-table tr:hover {
+            @apply bg-gray-50;
+        }
+        /* 로딩 스피너 */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6; /* Tailwind blue-500 */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 p-4 sm:p-6 md:p-8 flex items-center justify-center min-h-screen">
+    
+    <!-- Authentication Section (로그인/회원가입) -->
+    <div id="auth-section" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-md border border-gray-200">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-8 tracking-tight">편리한가계부의시작 💰</h1>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-5 text-center">로그인 또는 회원가입</h2>
+        
+        <!-- 메시지 표시 영역 (인증용) -->
+        <div id="auth-message-display" class="hidden p-3 mb-4 rounded-lg text-sm text-center font-medium" role="alert"></div>
+
+        <form id="auth-form" class="space-y-4">
+            <div>
+                <label for="auth-email" class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                <input type="email" id="auth-email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="이메일을 입력하세요" required>
+            </div>
+            <div>
+                <label for="auth-password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                <input type="password" id="auth-password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="비밀번호를 입력하세요 (6자 이상)" required>
+            </div>
+            <button type="submit" id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">로그인</button>
+            <button type="button" id="register-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">회원가입</button>
+            <button type="button" id="reset-password-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">비밀번호 찾기</button>
+        </form>
+    </div>
+
+    <!-- Main App Section (가계부 앱 콘텐츠) -->
+    <div id="main-app-section" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-4xl border border-gray-200">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">편리한가계부의시작 💰</h1>
+            <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">로그아웃</button>
+        </div>
+        
+        <!-- 메시지 표시 영역 (앱용) -->
+        <div id="message-display" class="hidden p-3 mb-4 rounded-lg text-sm text-center font-medium" role="alert"></div>
+
+        <!-- 탭 메뉴 -->
+        <div class="flex border-b border-gray-200 mb-6">
+            <button class="tab-button active" data-tab="dashboard">대시보드</button>
+            <button class="tab-button" data-tab="transactions">거래 내역</button>
+            <button class="tab-button" data-tab="assets-liabilities">자산/부채</button>
+            <button class="tab-button" data-tab="budget">예산</button>
+            <button class="tab-button" data-tab="cash-flow">현금 흐름</button>
+            <button class="tab-button" data-tab="recurring-transactions">고정 거래</button>
+            <button class="tab-button" data-tab="reports">보고서</button>
+        </div>
+
+        <!-- 탭 콘텐츠 -->
+        <div id="tab-content-dashboard" class="tab-content">
+            <!-- 대시보드 섹션 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">대시보드</h2>
+            
+            <!-- 오늘의 미니노트 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">오늘의 미니노트</h3>
+                <textarea id="daily-memo" class="w-full h-24 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="오늘의 지출, 특이사항 등을 기록해보세요."></textarea>
+                <button id="save-memo-btn" class="mt-2 w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">메모 저장</button>
+            </div>
+
+            <!-- 월별 수입/지출/손익 요약 (텍스트) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">월별 수입/지출/손익 요약</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm space-y-2">
+                    <p>총 수입: <span id="dashboard-total-income" class="font-semibold text-green-600">0원</span></p>
+                    <p>총 지출: <span id="dashboard-total-expense" class="font-semibold text-red-600">0원</span></p>
+                    <p>순이익: <span id="dashboard-net-profit" class="font-bold text-blue-700">0원</span></p>
+                </div>
+            </div>
+
+            <!-- 카테고리별 지출 요약 (텍스트) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">카테고리별 지출 요약</h3>
+                <div id="category-spending-summary" class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <p class="text-gray-500">지출 카테고리 데이터 없음</p>
+                </div>
+            </div>
+
+            <!-- 태그별 지출 요약 (텍스트) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">태그별 지출 요약</h3>
+                <div id="tag-spending-summary" class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <p class="text-gray-500">태그 지출 데이터 없음</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-content-transactions" class="tab-content hidden">
+            <!-- 새로운 거래 입력 섹션 -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-5">새로운 거래 입력</h2>
+                <form id="transaction-form" class="space-y-5">
+                    <div class="form-grid">
+                        <div>
+                            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">날짜</label>
+                            <input type="date" id="date" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                        </div>
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700 mb-1">거래 유형</label>
+                            <select id="type" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                                <option value="">선택하세요</option>
+                                <option value="수입">수입</option>
+                                <option value="지출">지출</option>
+                                <option value="이체">이체</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="from-account" class="block text-sm font-medium text-gray-700 mb-1">출금 계정</label>
+                            <select id="from-account" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                                <option value="">선택하세요</option>
+                                <!-- 계정 목록은 JavaScript로 동적으로 추가될 예정입니다. -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="to-account" class="block text-sm font-medium text-gray-700 mb-1">입금 계정</label>
+                            <select id="to-account" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                                <option value="">선택하세요</option>
+                                <!-- 계정 목록은 JavaScript로 동적으로 추가될 예정입니다. -->
+                            </select>
+                        </div>
+                        <div class="full-width">
+                            <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">금액</label>
+                            <input type="number" id="amount" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="금액을 입력하세요" required>
+                        </div>
+                        <div class="full-width">
+                            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">항목/내용 (#태그 입력 가능)</label>
+                            <input type="text" id="description" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="내용을 입력하세요" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">거래 추가</button>
+                </form>
+            </div>
+
+            <!-- 거래 내역 목록 섹션 -->
+            <div>
+                <h2 id="transactions-list-title" class="text-2xl font-semibold text-gray-800 mb-5">거래 내역</h2>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button data-filter-type="all" class="filter-btn bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">전체</button>
+                    <button data-filter-type="수입" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">수입</button>
+                    <button data-filter-type="지출" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">지출</button>
+                    <button data-filter-type="이체" class="filter-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">이체</button>
+                    <button id="clear-filters-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">필터 초기화</button>
+                </div>
+                <!-- 기간 조회 필터 -->
+                <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                    <input type="date" id="start-date-filter" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="시작 날짜">
+                    <input type="date" id="end-date-filter" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="종료 날짜">
+                    <button id="apply-date-filter-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">기간 적용</button>
+                </div>
+                <!-- 태그 필터 -->
+                <div class="mb-4">
+                    <label for="tag-filter-input" class="block text-sm font-medium text-gray-700 mb-1">태그로 검색 (#예시)</label>
+                    <input type="text" id="tag-filter-input" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="#태그를 입력하세요">
+                </div>
+
+                <div id="transactions-table-container" class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>유형</th>
+                                <th>출금 계정</th>
+                                <th>입금 계정</th>
+                                <th class="text-right">금액</th>
+                                <th>내용</th>
+                                <th>태그</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body">
+                            <tr><td colspan="8" class="text-center text-gray-500 py-4">아직 거래 내역이 없습니다.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-content-assets-liabilities" class="tab-content hidden">
+            <!-- 자산/부채 섹션 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">자산/부채 현황</h2>
+            
+            <!-- 총 자산/부채/순자산 요약 -->
+            <div class="bg-blue-100 text-blue-800 rounded-xl p-5 mb-8 shadow-md">
+                <h3 class="text-xl font-semibold mb-3">총 자산 현황</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-lg">
+                        <span>총 자산:</span>
+                        <span class="font-bold total-asset-display">0원</span>
+                    </div>
+                    <div class="flex justify-between items-center text-lg">
+                        <span>총 부채:</span>
+                        <span class="font-bold total-liability-display">0원</span>
+                    </div>
+                    <div class="flex justify-between items-center text-2xl font-extrabold pt-2 border-t border-blue-500 mt-2">
+                        <span>순 자산:</span>
+                        <span class="net-asset-display">0원</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 계정 목록 표 -->
+            <div class="mb-8 overflow-x-auto">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">계정 목록</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>계정 이름</th>
+                            <th>그룹</th>
+                            <th>유형</th>
+                            <th class="text-right">초기 잔액</th>
+                            <th class="text-right">현재 잔액</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accounts-table-body">
+                        <tr><td colspan="6" class="text-center text-gray-500 py-4">계정 정보를 불러오는 중이거나, 계정이 없습니다.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 새로운 계정 추가 섹션 -->
+            <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">새로운 계정 추가</h3>
+                <form id="add-account-form" class="space-y-4">
+                    <div>
+                        <label for="new-account-name" class="block text-sm font-medium text-gray-700 mb-1">계정 이름</label>
+                        <input type="text" id="new-account-name" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="예: 국민은행, 식비, 월급" required>
+                    </div>
+                    <div>
+                        <label for="new-account-group" class="block text-sm font-medium text-gray-700 mb-1">계정 그룹</label>
+                        <select id="new-account-group" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                            <option value="">선택하세요</option>
+                            <option value="은행 계좌">은행 계좌 (자산)</option>
+                            <option value="현금">현금 (자산)</option>
+                            <option value="투자 계좌">투자 계좌 (자산)</option>
+                            <option value="신용카드">신용카드 (부채)</option>
+                            <option value="대출">대출 (부채)</option>
+                            <option value="수익">수익</option>
+                            <option value="비용">비용</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="new-account-initial-balance" class="block text-sm font-medium text-gray-700 mb-1">초기 잔액 (선택 사항)</label>
+                        <input type="number" id="new-account-initial-balance" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="초기 잔액 (자산/부채만 해당)" value="0">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">계정 추가</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="tab-content-budget" class="tab-content hidden">
+            <!-- 예산 섹션 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">예산 작성</h2>
+            <form id="budget-form" class="space-y-5">
+                <div>
+                    <label for="budget-month" class="block text-sm font-medium text-gray-700 mb-1">예산 월</label>
+                    <input type="month" id="budget-month" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                </div>
+                <div>
+                    <label for="expected-income" class="block text-sm font-medium text-gray-700 mb-1">예상 수입</label>
+                    <input type="number" id="expected-income" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="월 예상 수입" value="0">
+                </div>
+                <div>
+                    <label for="fixed-expenses" class="block text-sm font-medium text-gray-700 mb-1">고정 지출 (월세, 대출, 통신비 등)</label>
+                    <input type="number" id="fixed-expenses" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="월 고정 지출 총액" value="0">
+                </div>
+                <div>
+                    <label for="disposable-income" class="block text-sm font-medium text-gray-700 mb-1">남는 금액 (용돈)</label>
+                    <input type="text" id="disposable-income" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-700 sm:text-base" readonly>
+                </div>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">예산 저장</button>
+            </form>
+            <div id="budget-summary" class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-gray-800">
+                <h3 class="font-bold text-lg mb-2">현재 예산 요약 (<span id="current-budget-month"></span>)</h3>
+                <p>예상 수입: <span id="display-expected-income" class="font-semibold">0원</span></p>
+                <p>고정 지출: <span id="display-fixed-expenses" class="font-semibold">0원</span></p>
+                <p>남는 금액 (용돈): <span id="display-disposable-income" class="font-bold text-blue-700">0원</span></p>
+            </div>
+        </div>
+
+        <div id="tab-content-cash-flow" class="tab-content hidden">
+            <!-- 현금 흐름표 섹션 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">현금 흐름표</h2>
+            <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                <input type="date" id="cash-flow-start-date" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="시작 날짜">
+                <input type="date" id="cash-flow-end-date" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="종료 날짜">
+                <button id="generate-cash-flow-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">현금 흐름 생성</button>
+            </div>
+            <div id="cash-flow-result" class="mt-5 p-4 bg-gray-50 border border-gray-200 rounded-lg text-gray-800">
+                <h3 class="font-bold text-lg mb-2">현금 흐름 요약 (<span id="cash-flow-period"></span>)</h3>
+                <p>총 현금 유입 (수입 + 이체 유입): <span id="cash-inflow" class="font-semibold text-green-600">0원</span></p>
+                <p>총 현금 유출 (지출 + 이체 유출): <span id="cash-outflow" class="font-semibold text-red-600">0원</span></p>
+                <p class="font-bold text-lg mt-2">순 현금 흐름: <span id="net-cash-flow" class="font-extrabold">0원</span></p>
+                <p class="text-gray-500 text-sm mt-2">※ 현금 흐름은 실제 돈이 오고 간 내역을 기준으로 합니다.</p>
+            </div>
+        </div>
+
+        <div id="tab-content-recurring-transactions" class="tab-content hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">고정 거래 관리</h2>
+
+            <!-- 이번 달 적용 가능한 고정 거래 -->
+            <div class="mb-8 p-4 bg-yellow-50 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">이번 달 적용 가능한 고정 거래</h3>
+                <div id="pending-recurring-transactions-list" class="space-y-3">
+                    <p class="text-gray-500 text-center py-2">이번 달에 적용할 고정 거래가 없습니다.</p>
+                </div>
+            </div>
+
+            <!-- 새로운 고정 거래 추가 -->
+            <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">새로운 고정 거래 추가</h3>
+                <form id="add-recurring-transaction-form" class="space-y-4">
+                    <div>
+                        <label for="recurring-name" class="block text-sm font-medium text-gray-700 mb-1">거래 이름</label>
+                        <input type="text" id="recurring-name" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="예: 월세, 통신비, 월급" required>
+                    </div>
+                    <div>
+                        <label for="recurring-type" class="block text-sm font-medium text-gray-700 mb-1">거래 유형</label>
+                        <select id="recurring-type" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                            <option value="">선택하세요</option>
+                            <option value="수입">수입</option>
+                            <option value="지출">지출</option>
+                            <option value="이체">이체</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recurring-from-account" class="block text-sm font-medium text-gray-700 mb-1">출금 계정</label>
+                        <select id="recurring-from-account" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                            <option value="">선택하세요</option>
+                            <!-- 계정 목록은 JavaScript로 동적으로 추가될 예정입니다. -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recurring-to-account" class="block text-sm font-medium text-gray-700 mb-1">입금 계정</label>
+                        <select id="recurring-to-account" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                            <option value="">선택하세요</option>
+                            <!-- 계정 목록은 JavaScript로 동적으로 추가될 예정입니다. -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recurring-amount" class="block text-sm font-medium text-gray-700 mb-1">금액</label>
+                        <input type="number" id="recurring-amount" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="금액을 입력하세요" required>
+                    </div>
+                    <div>
+                        <label for="recurring-description" class="block text-sm font-medium text-gray-700 mb-1">항목/내용 (#태그 입력 가능)</label>
+                        <input type="text" id="recurring-description" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" placeholder="내용을 입력하세요" required>
+                    </div>
+                    <div>
+                        <label for="recurring-start-date" class="block text-sm font-medium text-gray-700 mb-1">시작일</label>
+                        <input type="date" id="recurring-start-date" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" required>
+                    </div>
+                    <div>
+                        <label for="recurring-day-of-month" class="block text-sm font-medium text-gray-700 mb-1">매월 몇 일?</label>
+                        <input type="number" id="recurring-day-of-month" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base" min="1" max="31" placeholder="1~31일" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">고정 거래 추가</button>
+                </form>
+            </div>
+
+            <!-- 등록된 고정 거래 목록 -->
+            <div class="mb-8 overflow-x-auto">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">등록된 고정 거래 목록</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>유형</th>
+                            <th>출금 계정</th>
+                            <th>입금 계정</th>
+                            <th class="text-right">금액</th>
+                            <th>내용</th>
+                            <th>시작일</th>
+                            <th>매월</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registered-recurring-transactions-table-body">
+                        <tr><td colspan="9" class="text-center text-gray-500 py-4">등록된 고정 거래가 없습니다.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-content-reports" class="tab-content hidden">
+            <!-- 보고서 섹션 -->
+            <h2 class="text-2xl font-semibold text-gray-800 mb-5">보고서</h2>
+
+            <!-- 보고서 기간 선택 -->
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">보고서 기간 설정</h3>
+                <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                    <input type="date" id="report-start-date" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                    <input type="date" id="report-end-date" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                    <button id="generate-report-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition duration-300 ease-in-out">보고서 생성</button>
+                </div>
+            </div>
+
+            <!-- 소비 리포트 (월별 비용/수익/손익) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">소비 리포트 (월별)</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <canvas id="monthlyExpenseIncomeChart"></canvas>
+                    <p class="mt-4 text-gray-600 italic text-sm">데이터: <span id="monthly-expense-income-data"></span></p>
+                </div>
+            </div>
+
+            <!-- 태그별 리포트 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">태그별 리포트</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div id="tag-report-summary">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>태그</th>
+                                    <th class="text-right">지출</th>
+                                    <th class="text-right">수입</th>
+                                    <th class="text-right">이체</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tag-report-tbody">
+                                <!-- 태그별 데이터는 JavaScript로 동적으로 추가됩니다. -->
+                                <tr><td colspan="4" class="text-center text-gray-500">보고서 기간을 선택하고 '보고서 생성' 버튼을 눌러주세요.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-4 text-gray-600 italic text-sm">데이터: <span id="tag-report-data"></span></p>
+                </div>
+            </div>
+
+            <!-- 기간 비교 리포트 (Placeholder) -->
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">기간 비교 리포트</h3>
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm text-gray-600 italic">
+                    <p>선택한 두 기간의 수입/지출/순이익을 비교하는 차트와 표가 여기에 표시됩니다.</p>
+                    <p>데이터: <span id="period-comparison-data"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 파일을 연결합니다. -->
+    <script src="script.js"></script>
+</body>
+</html>
