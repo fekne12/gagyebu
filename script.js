@@ -26,7 +26,8 @@ const firebaseConfig = {
 };
 
 // GitHub Pages에서는 Canvas의 특별한 초기 인증 토큰이 필요 없습니다.
-const appId = firebaseConfig.appId; // 위에서 설정한 appId를 사용합니다.
+// 이 부분은 Canvas 환경 변수 대신 firebaseConfig에서 직접 appId를 가져오도록 수정되었습니다.
+const appId = firebaseConfig.appId;
 const initialAuthToken = null; // 이 값은 사용하지 않습니다.
 
 if (Object.keys(firebaseConfig).length > 0 && firebaseConfig.apiKey && firebaseConfig.projectId) {
@@ -44,28 +45,24 @@ if (Object.keys(firebaseConfig).length > 0 && firebaseConfig.apiKey && firebaseC
         } else {
             console.log("Firebase: No user is signed in. Attempting anonymous/custom token sign-in.");
             try {
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                    console.log("Firebase: Signed in with custom token.");
-                } else {
-                    await signInAnonymously(auth);
-                    console.log("Firebase: Signed in anonymously.");
-                }
+                // GitHub Pages 환경에서는 __initial_auth_token이 없으므로 익명 로그인 시도
+                await signInAnonymously(auth);
+                console.log("Firebase: Signed in anonymously.");
             } catch (error) {
-                console.error("Firebase: Anonymous/Custom token sign-in failed", error);
-                // If even anonymous sign-in fails, show auth section and let user log in/register
-                firebaseInitialized = true; // Still consider Firebase ready, but no user
+                console.error("Firebase: Anonymous sign-in failed", error);
+                // 익명 로그인 실패 시, 인증 섹션 표시 및 사용자에게 로그인/회원가입 유도
+                firebaseInitialized = true; // Firebase는 준비되었지만, 사용자 인증은 안 됨
                 showAuthSection();
             }
         }
     });
 } else {
     console.warn("Firebase: Firebase config is not fully provided. Running in limited mode (no database persistence).");
-    // Fallback for local development or if Firebase config is missing
+    // Firebase 설정이 없거나 불완전할 경우, 데이터베이스 없이 앱 초기화
     firebaseInitialized = true;
-    userId = crypto.randomUUID(); // Generate a random ID for local-only use
-    initApp(); // Initialize app without Firebase persistence
-    showMainApp(); // Show app directly if no Firebase config
+    userId = crypto.randomUUID(); // 로컬 전용으로 임의의 ID 생성
+    initApp(); // Firebase 영구 저장 없이 앱 초기화
+    showMainApp(); // Firebase 설정이 없어도 앱 표시
 }
 
 
@@ -345,8 +342,7 @@ function getAccountsCollectionRef() {
         console.warn("Firestore or User ID not available for accounts.");
         return null;
     }
-    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
-    // Canvas 환경의 `__app_id`는 GitHub Pages에서는 사용되지 않습니다.
+    const appId = firebaseConfig.appId; // Canvas 환경의 __app_id 대신 firebaseConfig.appId를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/accounts`);
 }
 
@@ -359,7 +355,7 @@ function getTransactionsCollectionRef() {
         console.warn("Firestore or User ID not available for transactions.");
         return null;
     }
-    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
+    const appId = firebaseConfig.appId; // Canvas 환경의 __app_id 대신 firebaseConfig.appId를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/transactions`);
 }
 
@@ -372,7 +368,7 @@ function getBudgetsCollectionRef() {
         console.warn("Firestore or User ID not available for budgets.");
         return null;
     }
-    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
+    const appId = firebaseConfig.appId; // Canvas 환경의 __app_id 대신 firebaseConfig.appId를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/budgets`);
 }
 
@@ -385,7 +381,7 @@ function getDailyMemosCollectionRef() {
         console.warn("Firestore or User ID not available for daily memos.");
         return null;
     }
-    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
+    const appId = firebaseConfig.appId; // Canvas 환경의 __app_id 대신 firebaseConfig.appId를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/dailyMemos`);
 }
 
@@ -398,7 +394,7 @@ function getRecurringTransactionsCollectionRef() {
         console.warn("Firestore or User ID not available for recurring transactions.");
         return null;
     }
-    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
+    const appId = firebaseConfig.appId; // Canvas 환경의 __app_id 대신 firebaseConfig.appId를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/recurringTransactions`);
 }
 
@@ -1690,6 +1686,7 @@ function checkAndRenderPendingRecurringTransactions() {
             }
         });
     });
+    console.log("checkAndRenderPendingRecurringTransactions: 이번 달 적용 가능한 고정 거래 확인 완료.");
 }
 
 
