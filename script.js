@@ -6,35 +6,33 @@ let auth = null;
 let userId = null;
 let firebaseInitialized = false;
 
-// Firebase SDK imports (moved from HTML to JS for better module management)
-// NOTE: Corrected import paths by removing extra square brackets and parentheses.
+// Firebase SDK imports (이 부분은 그대로 둡니다)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, query, where, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// Firebase initialization and authentication setup
-// Canvas 환경에서 제공되는 변수 대신, 실제 Firebase 프로젝트 설정을 직접 입력합니다.
+// Firebase 초기화 및 인증 설정
+// 이곳에 사용자님의 실제 Firebase 프로젝트 설정을 입력합니다.
 const firebaseConfig = {
-  apiKey: "AIzaSyAwIkTnHg8_lDw_AYVVH859jD_8d658xAk",
-  authDomain: "gagyebu-36b54.firebaseapp.com",
-  projectId: "gagyebu-36b54",
-  storageBucket: "gagyebu-36b54.firebasestorage.app",
-  messagingSenderId: "496739106007",
-  appId: "1:496739106007:web:b70467fc791ccf61f50492",
-  measurementId: "G-X251LV704N"
+  apiKey: "AIzaSyAwIkTnHg8_1Dw_AYVVH859JD_8d658xAk", // 사용자님의 실제 키
+  authDomain: "gagyebu-36b54.firebaseapp.com", // 사용자님의 실제 도메인
+  projectId: "gagyebu-36b54", // 사용자님의 실제 프로젝트 ID
+  storageBucket: "gagyebu-36b54.firebaseapp.com", // 사용자님의 실제 스토리지 버킷
+  messagingSenderId: "496739106007", // 사용자님의 실제 메시징 센더 ID
+  appId: "1:496739106007:web:b70467fc791ccf61f50492", // 사용자님의 실제 앱 ID
+  measurementId: "G-X251LV784N" // 사용자님의 실제 측정 ID (있다면)
 };
+
+// GitHub Pages에서는 Canvas의 특별한 초기 인증 토큰이 필요 없습니다.
 const appId = firebaseConfig.appId; // 위에서 설정한 appId를 사용합니다.
 const initialAuthToken = null; // 이 값은 사용하지 않습니다.
-
-// GitHub Pages에서는 __app_id와 __initial_auth_token이 제공되지 않으므로,
-// firebaseConfig.appId를 직접 사용하고 initialAuthToken은 제거하거나 null로 둡니다.
-const appId = firebaseConfig.appId; // 이제 firebaseConfig에서 직접 가져옵니다.
-const initialAuthToken = null; // GitHub Pages에서는 Canvas의 초기 인증 토큰이 없습니다.
 
 if (Object.keys(firebaseConfig).length > 0) {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
     auth = getAuth(app);
+    // ... 나머지 코드
+}
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
