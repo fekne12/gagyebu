@@ -90,7 +90,7 @@
     </div>
 
     <!-- Main App Section (가계부 앱 콘텐츠) -->
-    <div id="main-app-section" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-4xl border border-gray-200">
+    <div id="main-app-section" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-6xl border border-gray-200">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">편리한가계부의시작 💰</h1>
             <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">로그아웃</button>
@@ -277,7 +277,7 @@
                         </tr>
                     </thead>
                     <tbody id="accounts-table-body">
-                        <tr><td colspan="6" class="text-center text-gray-500 py-4">계정 정보를 불러오는 중이거나, 계정이 없습니다. "새로운 계정 추가" 섹션에서 계정을 추가해주세요.</td></tr>
+                        <tr><td colspan="6" class="text-center text-gray-500 py-4">계정 정보를 불러오는 중이거나, 계정이 없습니다.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -497,13 +497,13 @@
                 <h3 class="text-xl font-semibold text-gray-800 mb-3">기간 비교 리포트</h3>
                 <div class="bg-gray-50 p-4 rounded-lg shadow-sm text-gray-600 italic">
                     <p>선택한 두 기간의 수입/지출/순이익을 비교하는 차트와 표가 여기에 표시됩니다.</p>
-                    <p>데이터: <span id="period-comparison-data"></span></p>
+                    <p class="mt-4 text-gray-600 italic text-sm">데이터: <span id="period-comparison-data"></span></p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- JavaScript 파일을 연결합니다. -->
-    <script src="script.js" type="module"></script>
+    <script src="script.js"></script>
 </body>
 </html>
