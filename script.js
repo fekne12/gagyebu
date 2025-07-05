@@ -23,7 +23,8 @@ const firebaseConfig = {
   appId: "1:496739106007:web:b70467fc791ccf61f50492",
   measurementId: "G-X251LV704N"
 };
-
+const appId = firebaseConfig.appId; // 위에서 설정한 appId를 사용합니다.
+const initialAuthToken = null; // 이 값은 사용하지 않습니다.
 
 // GitHub Pages에서는 __app_id와 __initial_auth_token이 제공되지 않으므로,
 // firebaseConfig.appId를 직접 사용하고 initialAuthToken은 제거하거나 null로 둡니다.
