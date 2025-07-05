@@ -6,33 +6,33 @@ let auth = null;
 let userId = null;
 let firebaseInitialized = false;
 
-// Firebase SDK imports (이 부분은 그대로 둡니다)
+// Firebase SDK imports (moved from HTML to JS for better module management)
+// NOTE: Corrected import paths by removing extra square brackets and parentheses.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, query, where, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // Firebase 초기화 및 인증 설정
 // 이곳에 사용자님의 실제 Firebase 프로젝트 설정을 입력합니다.
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAwIkTnHg8_1Dw_AYVVH859JD_8d658xAk", // 사용자님의 실제 키
-  authDomain: "gagyebu-36b54.firebaseapp.com", // 사용자님의 실제 도메인
-  projectId: "gagyebu-36b54", // 사용자님의 실제 프로젝트 ID
-  storageBucket: "gagyebu-36b54.firebaseapp.com", // 사용자님의 실제 스토리지 버킷
-  messagingSenderId: "496739106007", // 사용자님의 실제 메시징 센더 ID
-  appId: "1:496739106007:web:b70467fc791ccf61f50492", // 사용자님의 실제 앱 ID
-  measurementId: "G-X251LV784N" // 사용자님의 실제 측정 ID (있다면)
+  apiKey: "AIzaSyAwIkTnHg8_lDw_AYVVH859jD_8d658xAk",
+  authDomain: "gagyebu-36b54.firebaseapp.com",
+  projectId: "gagyebu-36b54",
+  storageBucket: "gagyebu-36b54.firebasestorage.app",
+  messagingSenderId: "496739106007",
+  appId: "1:496739106007:web:b70467fc791ccf61f50492",
+  measurementId: "G-X251LV704N"
 };
 
 // GitHub Pages에서는 Canvas의 특별한 초기 인증 토큰이 필요 없습니다.
 const appId = firebaseConfig.appId; // 위에서 설정한 appId를 사용합니다.
 const initialAuthToken = null; // 이 값은 사용하지 않습니다.
 
-if (Object.keys(firebaseConfig).length > 0) {
+if (Object.keys(firebaseConfig).length > 0 && firebaseConfig.apiKey && firebaseConfig.projectId) {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
     auth = getAuth(app);
-    // ... 나머지 코드
-}
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -60,7 +60,8 @@ if (Object.keys(firebaseConfig).length > 0) {
         }
     });
 } else {
-    console.warn("Firebase: Firebase config is not provided. Running in limited mode (no database persistence).");
+    console.warn("Firebase: Firebase config is not fully provided. Running in limited mode (no database persistence).");
+    // Fallback for local development or if Firebase config is missing
     firebaseInitialized = true;
     userId = crypto.randomUUID(); // Generate a random ID for local-only use
     initApp(); // Initialize app without Firebase persistence
@@ -344,7 +345,8 @@ function getAccountsCollectionRef() {
         console.warn("Firestore or User ID not available for accounts.");
         return null;
     }
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
+    // Canvas 환경의 `__app_id`는 GitHub Pages에서는 사용되지 않습니다.
     return collection(db, `artifacts/${appId}/users/${userId}/accounts`);
 }
 
@@ -357,7 +359,7 @@ function getTransactionsCollectionRef() {
         console.warn("Firestore or User ID not available for transactions.");
         return null;
     }
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/transactions`);
 }
 
@@ -370,7 +372,7 @@ function getBudgetsCollectionRef() {
         console.warn("Firestore or User ID not available for budgets.");
         return null;
     }
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/budgets`);
 }
 
@@ -383,7 +385,7 @@ function getDailyMemosCollectionRef() {
         console.warn("Firestore or User ID not available for daily memos.");
         return null;
     }
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/dailyMemos`);
 }
 
@@ -396,7 +398,7 @@ function getRecurringTransactionsCollectionRef() {
         console.warn("Firestore or User ID not available for recurring transactions.");
         return null;
     }
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    // 이 부분에서 `appId`는 `firebaseConfig.appId`를 사용합니다.
     return collection(db, `artifacts/${appId}/users/${userId}/recurringTransactions`);
 }
 
@@ -1688,7 +1690,6 @@ function checkAndRenderPendingRecurringTransactions() {
             }
         });
     });
-    console.log("checkAndRenderPendingRecurringTransactions: 이번 달 적용 가능한 고정 거래 확인 완료.");
 }
 
 
