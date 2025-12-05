@@ -6,321 +6,302 @@
     <title>편리한 가계부 | 홈</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            color-scheme: light;
+        }
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #f8fbff 0, #eef1f5 28%, #e7e9ee 60%, #edf0f5 100%);
         }
-        .glass {
-            backdrop-filter: blur(14px);
-            background: rgba(255, 255, 255, 0.6);
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 25px 80px rgba(15, 23, 42, 0.08), 0 4px 18px rgba(15, 23, 42, 0.06);
+            backdrop-filter: blur(10px);
         }
-        .section-gradient {
-            background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 30%, #ecfeff 100%);
+        .chip {
+            background: linear-gradient(120deg, #f6f8fb, #edf1f7);
+            border: 1px solid #e8ecf3;
+        }
+        .soft-border {
+            border: 1px solid #e5e8ee;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-    <header class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-white to-cyan-100"></div>
-        <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-lg">₩</div>
-                <div>
-                    <p class="text-xs uppercase tracking-[0.18em] text-indigo-500 font-semibold">Your Daily Finance Partner</p>
-                    <h1 class="text-xl font-extrabold">편리한 가계부</h1>
-                </div>
+<body class="text-slate-900 antialiased">
+    <header class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="h-11 w-11 rounded-2xl bg-white shadow-inner flex items-center justify-center soft-border text-indigo-600 font-black text-lg">₩</div>
+            <div>
+                <p class="text-[10px] uppercase tracking-[0.24em] text-slate-500 font-semibold">GAGYEBU</p>
+                <p class="text-xl font-semibold">편리한 가계부</p>
             </div>
-            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
-                <a href="#features" class="hover:text-indigo-700">특징</a>
-                <a href="#workflow" class="hover:text-indigo-700">사용 방법</a>
-                <a href="#cta" class="hover:text-indigo-700">시작하기</a>
-            </nav>
-            <a href="#cta" class="hidden sm:inline-flex bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-indigo-700 transition">무료로 시작</a>
         </div>
-        <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-20 grid lg:grid-cols-2 gap-10 items-center">
+        <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
+            <a href="#features" class="hover:text-slate-900">특징</a>
+            <a href="#workflow" class="hover:text-slate-900">루틴</a>
+            <a href="#insight" class="hover:text-slate-900">AI 리포트</a>
+            <a href="#cta" class="hover:text-slate-900">시작하기</a>
+        </nav>
+        <a href="#cta" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold hover:opacity-90 transition">무료로 시작</a>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-20 space-y-24">
+        <section class="grid lg:grid-cols-2 gap-10 items-center">
             <div class="space-y-6">
-                <p class="inline-flex items-center gap-2 bg-white/70 border border-indigo-100 rounded-full px-3 py-1 text-sm text-indigo-700 font-semibold shadow-sm">지출 통제 · 예산 관리 · 자산 추적</p>
-                <h2 class="text-4xl sm:text-5xl font-black leading-tight text-slate-900">복잡한 돈 관리,<br class="hidden sm:block">이제 한 곳에서 끝내세요.</h2>
-                <p class="text-lg text-slate-700 leading-relaxed">수입과 지출, 투자와 부채까지 모두 연결된 가계부 홈입니다. 일간 소비 요약, 자동 태그, 간단한 목표 설정으로 스스로 재무 코치를 만나 보세요.</p>
+                <div class="inline-flex items-center gap-2 chip px-3 py-1 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    시간 절약 · 자동 동기화 · 깔끔한 인터페이스
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-black leading-tight text-slate-900">애플처럼 깔끔한 <br class="hidden sm:block">하루의 재무 홈.</h1>
+                <p class="text-lg text-slate-700 leading-relaxed">모든 계좌와 카드를 한 화면에서 확인하고, 자동으로 정리된 예산과 리포트를 받아보세요. 방해 요소 없이 필요한 정보만 보여주는 미니멀한 가계부입니다.</p>
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="#cta" class="inline-flex justify-center items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">지금 바로 시작하기</a>
-                    <a href="#features" class="inline-flex justify-center items-center gap-2 bg-white/80 text-slate-800 px-5 py-3 rounded-xl font-semibold border border-slate-200 shadow-sm hover:border-indigo-200 transition">주요 기능 보기</a>
+                    <a href="#cta" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-lg shadow-slate-300 hover:-translate-y-0.5 transition">무료 시작</a>
+                    <a href="#features" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-800 font-semibold soft-border shadow-sm hover:-translate-y-0.5 transition">주요 기능 보기</a>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                    <div class="glass rounded-2xl p-4 border border-white/60 shadow">
-                        <p class="text-2xl font-black text-indigo-700">120K+</p>
-                        <p class="text-xs text-slate-600">기록된 거래</p>
+                    <div class="card rounded-2xl p-4">
+                        <p class="text-2xl font-black text-slate-900">120K+</p>
+                        <p class="text-xs text-slate-500">기록된 거래</p>
                     </div>
-                    <div class="glass rounded-2xl p-4 border border-white/60 shadow">
-                        <p class="text-2xl font-black text-indigo-700">98%</p>
-                        <p class="text-xs text-slate-600">만족도</p>
+                    <div class="card rounded-2xl p-4">
+                        <p class="text-2xl font-black text-slate-900">98%</p>
+                        <p class="text-xs text-slate-500">만족도</p>
                     </div>
-                    <div class="glass rounded-2xl p-4 border border-white/60 shadow">
-                        <p class="text-2xl font-black text-indigo-700">4.8/5</p>
-                        <p class="text-xs text-slate-600">앱 스토어 평점</p>
+                    <div class="card rounded-2xl p-4">
+                        <p class="text-2xl font-black text-slate-900">4.8</p>
+                        <p class="text-xs text-slate-500">앱 스토어 평점</p>
                     </div>
-                    <div class="glass rounded-2xl p-4 border border-white/60 shadow">
-                        <p class="text-2xl font-black text-indigo-700">24/7</p>
-                        <p class="text-xs text-slate-600">데이터 동기화</p>
+                    <div class="card rounded-2xl p-4">
+                        <p class="text-2xl font-black text-slate-900">24/7</p>
+                        <p class="text-xs text-slate-500">데이터 동기화</p>
                     </div>
                 </div>
             </div>
             <div class="relative">
-                <div class="absolute -left-8 -top-8 h-24 w-24 bg-indigo-200 rounded-full blur-2xl"></div>
-                <div class="absolute -right-10 -bottom-10 h-32 w-32 bg-cyan-200 rounded-full blur-2xl"></div>
-                <div class="relative bg-white rounded-3xl shadow-2xl border border-indigo-50 overflow-hidden">
-                    <div class="px-6 py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white flex items-center justify-between">
+                <div class="absolute -left-16 -top-10 h-48 w-48 bg-white/70 rounded-full blur-3xl"></div>
+                <div class="absolute -right-10 -bottom-10 h-40 w-40 bg-indigo-200/50 rounded-full blur-3xl"></div>
+                <div class="relative card rounded-3xl p-6">
+                    <div class="flex items-center justify-between mb-6">
                         <div>
-                            <p class="text-xs uppercase tracking-[0.24em] text-white/80">대시보드</p>
-                            <p class="text-lg font-bold">이번 달 자산 흐름</p>
+                            <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500 font-semibold">Dashboard</p>
+                            <p class="text-xl font-bold">이번 달 흐름</p>
                         </div>
-                        <span class="text-sm bg-white/20 px-3 py-1 rounded-full font-semibold">실시간</span>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 text-white">실시간</span>
                     </div>
-                    <div class="p-6 space-y-4">
-                        <div class="grid grid-cols-3 gap-3 text-center">
-                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                                <p class="text-sm text-slate-500">수입</p>
-                                <p class="text-2xl font-black text-emerald-600">₩2,480,000</p>
-                            </div>
-                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                                <p class="text-sm text-slate-500">지출</p>
-                                <p class="text-2xl font-black text-rose-600">₩1,320,000</p>
-                            </div>
-                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                                <p class="text-sm text-slate-500">순이익</p>
-                                <p class="text-2xl font-black text-indigo-700">₩1,160,000</p>
-                            </div>
+                    <div class="grid grid-cols-3 gap-3 mb-6">
+                        <div class="soft-border rounded-2xl p-4 bg-white shadow-sm">
+                            <p class="text-xs text-slate-500">수입</p>
+                            <p class="text-2xl font-black text-emerald-600">₩2,480,000</p>
                         </div>
-                        <div class="rounded-2xl border border-slate-100 p-4 bg-slate-50">
-                            <p class="text-sm font-semibold text-slate-600 mb-2">카테고리별 지출</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between text-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
-                                        <p>식비</p>
-                                    </div>
-                                    <p class="font-semibold">₩420,000</p>
-                                </div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                                        <p>주거/관리비</p>
-                                    </div>
-                                    <p class="font-semibold">₩350,000</p>
-                                </div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                                        <p>교통/차량</p>
-                                    </div>
-                                    <p class="font-semibold">₩190,000</p>
-                                </div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <div class="flex items-center gap-3">
-                                        <span class="h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-                                        <p>취미/문화</p>
-                                    </div>
-                                    <p class="font-semibold">₩160,000</p>
-                                </div>
-                            </div>
+                        <div class="soft-border rounded-2xl p-4 bg-white shadow-sm">
+                            <p class="text-xs text-slate-500">지출</p>
+                            <p class="text-2xl font-black text-rose-500">₩1,320,000</p>
                         </div>
-                        <div class="rounded-2xl border border-slate-100 p-4 bg-gradient-to-r from-indigo-50 to-cyan-50 flex items-center gap-4">
-                            <div class="h-12 w-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black">AI</div>
-                            <div>
-                                <p class="text-sm font-semibold text-indigo-700">AI 소비 통찰</p>
-                                <p class="text-sm text-slate-600">주간 소비 패턴을 요약하고 절감 가능한 카테고리를 추천합니다.</p>
+                        <div class="soft-border rounded-2xl p-4 bg-white shadow-sm">
+                            <p class="text-xs text-slate-500">순이익</p>
+                            <p class="text-2xl font-black text-indigo-600">₩1,160,000</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                                <p class="text-slate-700">식비</p>
                             </div>
+                            <p class="font-semibold">₩420,000</p>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                                <p class="text-slate-700">주거/관리비</p>
+                            </div>
+                            <p class="font-semibold">₩350,000</p>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                                <p class="text-slate-700">교통/차량</p>
+                            </div>
+                            <p class="font-semibold">₩190,000</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <main class="space-y-24 pb-20">
-        <section id="features" class="section-gradient py-16">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6">
-                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+        <section id="features" class="space-y-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.24em] text-slate-500 font-semibold">Features</p>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mt-2">덜어낸 디자인, 필요한 기능만</h2>
+                    <p class="text-lg text-slate-700 mt-3">불필요한 버튼 없이 기록, 정리, 리포트에 집중한 미니멀 인터페이스.</p>
+                </div>
+                <a href="#cta" class="self-start text-sm font-semibold text-slate-800 underline-offset-4 hover:underline">무료로 사용해 보기</a>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold mb-4">1</div>
+                    <h3 class="text-xl font-semibold mb-2">실시간 계좌 통합</h3>
+                    <p class="text-slate-600">은행, 카드, 현금 흐름을 자동으로 모아 계정 간 이체도 몇 초 안에 기록합니다.</p>
+                </article>
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold mb-4">2</div>
+                    <h3 class="text-xl font-semibold mb-2">스마트 자동 태그</h3>
+                    <p class="text-slate-600">메모 속 해시태그로 카테고리를 자동 분류하고 월간 소비 리포트를 생성합니다.</p>
+                </article>
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-700 text-white flex items-center justify-center font-bold mb-4">3</div>
+                    <h3 class="text-xl font-semibold mb-2">예산 목표 추적</h3>
+                    <p class="text-slate-600">카테고리 별 예산을 설정하고, 초과 예상 시 알림으로 알려줍니다.</p>
+                </article>
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-600 text-white flex items-center justify-center font-bold mb-4">4</div>
+                    <h3 class="text-xl font-semibold mb-2">현금 흐름 차트</h3>
+                    <p class="text-slate-600">주별/월별 수입과 지출을 자동 그래프로 그려 재무 밸런스를 한눈에 확인합니다.</p>
+                </article>
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-500 text-white flex items-center justify-center font-bold mb-4">5</div>
+                    <h3 class="text-xl font-semibold mb-2">데이터 백업</h3>
+                    <p class="text-slate-600">중요한 기록은 모두 클라우드로 자동 동기화되어 언제든 복구할 수 있습니다.</p>
+                </article>
+                <article class="card rounded-2xl p-5">
+                    <div class="h-10 w-10 rounded-xl bg-slate-400 text-white flex items-center justify-center font-bold mb-4">6</div>
+                    <h3 class="text-xl font-semibold mb-2">가족 공유 모드</h3>
+                    <p class="text-slate-600">가족 구성원과 예산을 공유하고, 허용된 범위 내에서 기록을 함께 관리하세요.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="workflow" class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-4">
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-500 font-semibold">Workflow</p>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">3단계로 끝내는 가계부 루틴</h2>
+                <p class="text-lg text-slate-700">몇 가지 습관만 더하면, 복잡한 엑셀 대신 깔끔한 대시보드로 재무 생활을 관리할 수 있습니다.</p>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-indigo-500"></span>매일 1분, 커피값부터 큰 지출까지 모두 기록</li>
+                    <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500"></span>주간 리포트로 예상 과소/과대 지출 파악</li>
+                    <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-amber-500"></span>월말 목표 대비 실적 확인 후 다음 달 계획 수립</li>
+                </ul>
+            </div>
+            <div class="grid gap-4">
+                <div class="card rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-sm font-semibold text-slate-700">Step 1</p>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 text-white">오늘의 기록</span>
+                    </div>
+                    <p class="text-lg font-bold mb-2">거래 추가</p>
+                    <p class="text-slate-600">날짜, 금액, 계정만 입력하면 자동으로 카테고리를 추천하고 메모는 태그로 분류됩니다.</p>
+                </div>
+                <div class="card rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-sm font-semibold text-slate-700">Step 2</p>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-800 soft-border">패턴 분석</span>
+                    </div>
+                    <p class="text-lg font-bold mb-2">리포트 확인</p>
+                    <p class="text-slate-600">주간/월간 리포트가 자동 생성되어, 어떤 부분에서 절약할 수 있는지 알려줍니다.</p>
+                </div>
+                <div class="card rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-sm font-semibold text-slate-700">Step 3</p>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-800 soft-border">목표 설정</span>
+                    </div>
+                    <p class="text-lg font-bold mb-2">예산 조정</p>
+                    <p class="text-slate-600">예산을 수정하거나 알림을 설정하여 다음 달 목표를 지키도록 도와줍니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="insight" class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-4">
+                <p class="text-xs uppercase tracking-[0.24em] text-slate-500 font-semibold">Insight</p>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900">AI가 요약해 주는 소비 리포트</h2>
+                <p class="text-lg text-slate-700">매주 토요일 아침, 이메일과 앱 알림으로 도착하는 요약 리포트를 받아보세요. 주요 지출과 절감 포인트를 한눈에 보여줍니다.</p>
+                <ul class="grid sm:grid-cols-2 gap-2 text-sm text-slate-700">
+                    <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span>주간/월간 지출 변화</li>
+                    <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></span>카테고리 TOP 5</li>
+                    <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-amber-500"></span>예산 초과 위험 알림</li>
+                    <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-rose-500"></span>절감 아이디어 제안</li>
+                </ul>
+            </div>
+            <div class="card rounded-3xl p-6 space-y-4">
+                <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm uppercase tracking-[0.24em] text-indigo-600 font-semibold">Features</p>
-                        <h3 class="text-3xl sm:text-4xl font-black text-slate-900 mt-3">돈 관리가 쉬워지는 이유</h3>
-                        <p class="text-lg text-slate-700 mt-3">실제 가계부 사용자의 흐름을 그대로 담아, 필요한 기능만 담백하게 구성했습니다.</p>
+                        <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500 font-semibold">Weekly Report</p>
+                        <p class="text-lg font-bold text-slate-900">2월 2주차 소비 요약</p>
                     </div>
-                    <a href="#cta" class="self-start inline-flex items-center gap-2 text-indigo-700 font-semibold">무료로 사용해 보기 →</a>
+                    <span class="text-xs px-3 py-1 rounded-full bg-slate-900 text-white">AI 추천</span>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold mb-4">1</div>
-                        <h4 class="text-xl font-bold mb-2">실시간 계좌 통합</h4>
-                        <p class="text-slate-700">은행, 카드, 현금 흐름을 한 번에 정리하고 계정 간 이체도 몇 초 안에 기록합니다.</p>
-                    </article>
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold mb-4">2</div>
-                        <h4 class="text-xl font-bold mb-2">스마트 자동 태그</h4>
-                        <p class="text-slate-700">메모 속 해시태그로 카테고리를 자동 분류하고, 월간 소비 리포트를 생성합니다.</p>
-                    </article>
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold mb-4">3</div>
-                        <h4 class="text-xl font-bold mb-2">예산 목표 추적</h4>
-                        <p class="text-slate-700">카테고리 별 예산을 설정하고, 초과 예상 시 알림으로 알려줍니다.</p>
-                    </article>
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold mb-4">4</div>
-                        <h4 class="text-xl font-bold mb-2">현금 흐름 차트</h4>
-                        <p class="text-slate-700">주별/월별 수입과 지출을 자동 그래프로 그려 재무 밸런스를 한눈에 확인합니다.</p>
-                    </article>
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold mb-4">5</div>
-                        <h4 class="text-xl font-bold mb-2">데이터 백업</h4>
-                        <p class="text-slate-700">중요한 기록은 모두 클라우드로 자동 동기화되어 언제든 복구할 수 있습니다.</p>
-                    </article>
-                    <article class="glass rounded-2xl p-6 shadow border border-white/60">
-                        <div class="h-10 w-10 rounded-xl bg-cyan-500 text-white flex items-center justify-center font-bold mb-4">6</div>
-                        <h4 class="text-xl font-bold mb-2">가족 공유 모드</h4>
-                        <p class="text-slate-700">가족 구성원과 예산을 공유하고, 허용된 범위 내에서 기록을 함께 관리하세요.</p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section id="workflow" class="max-w-6xl mx-auto px-4 sm:px-6">
-            <div class="flex flex-col lg:flex-row items-start gap-8">
-                <div class="lg:w-5/12 space-y-4">
-                    <p class="text-sm uppercase tracking-[0.24em] text-indigo-600 font-semibold">Workflow</p>
-                    <h3 class="text-3xl sm:text-4xl font-black text-slate-900">3단계로 끝내는 가계부 루틴</h3>
-                    <p class="text-lg text-slate-700">몇 가지 습관만 더하면, 복잡한 엑셀 대신 깔끔한 대시보드로 재무 생활을 관리할 수 있습니다.</p>
-                    <ul class="space-y-4 text-slate-700">
-                        <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-indigo-500"></span>매일 1분, 커피값부터 큰 지출까지 모두 기록</li>
-                        <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500"></span>주간 리포트로 예상 과소/과대 지출 파악</li>
-                        <li class="flex gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-amber-500"></span>월말에는 목표 대비 실적을 확인하고 다음 달 계획 수립</li>
-                    </ul>
-                </div>
-                <div class="lg:flex-1 grid gap-4">
-                    <div class="glass rounded-2xl p-6 border border-white/60 shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-semibold text-slate-700">Step 1</p>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full">오늘의 기록</span>
-                        </div>
-                        <p class="text-lg font-bold mb-2">거래 추가</p>
-                        <p class="text-slate-700">날짜, 금액, 계정만 입력하면 자동으로 카테고리를 추천하고 메모는 태그로 분류됩니다.</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="soft-border rounded-2xl p-4 bg-white shadow-sm">
+                        <p class="text-xs text-slate-500">지출 총합</p>
+                        <p class="text-2xl font-black text-rose-500">₩1,320,000</p>
+                        <p class="text-xs text-rose-500 mt-1">지난주보다 +8%</p>
                     </div>
-                    <div class="glass rounded-2xl p-6 border border-white/60 shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-semibold text-slate-700">Step 2</p>
-                            <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">패턴 분석</span>
-                        </div>
-                        <p class="text-lg font-bold mb-2">리포트 확인</p>
-                        <p class="text-slate-700">주간/월간 리포트가 자동 생성되어, 어떤 부분에서 절약할 수 있는지 알려줍니다.</p>
+                    <div class="soft-border rounded-2xl p-4 bg-white shadow-sm">
+                        <p class="text-xs text-slate-500">절감 가능액</p>
+                        <p class="text-2xl font-black text-emerald-600">₩210,000</p>
+                        <p class="text-xs text-emerald-500 mt-1">카드 혜택 최적화</p>
                     </div>
-                    <div class="glass rounded-2xl p-6 border border-white/60 shadow">
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-sm font-semibold text-slate-700">Step 3</p>
-                            <span class="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full">목표 설정</span>
-                        </div>
-                        <p class="text-lg font-bold mb-2">예산 조정</p>
-                        <p class="text-slate-700">예산을 수정하거나 알림을 설정하여 다음 달 목표를 지키도록 도와줍니다.</p>
+                </div>
+                <div class="space-y-2 text-sm text-slate-700">
+                    <div class="flex items-start gap-3">
+                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 mt-1"></span>
+                        <p>식비가 전주 대비 12% 증가했어요. 장보기는 주 1회로 묶고, 카드 할인 요일을 활용해 보세요.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 mt-1"></span>
+                        <p>대중교통비가 2만원 절감되었습니다. 이동 패턴을 유지하면 월간 목표를 달성할 수 있어요.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="h-2.5 w-2.5 rounded-full bg-amber-500 mt-1"></span>
+                        <p>구독 서비스 중 사용하지 않는 항목이 2개 발견되었습니다. 해지 시 월 1.5만원 절약 가능합니다.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section-gradient py-16">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="md:w-1/2 space-y-4">
-                        <p class="text-sm uppercase tracking-[0.24em] text-indigo-600 font-semibold">Insight</p>
-                        <h3 class="text-3xl sm:text-4xl font-black text-slate-900">AI가 요약해 주는 소비 리포트</h3>
-                        <p class="text-lg text-slate-700">매주 토요일 아침, 이메일과 앱 알림으로 도착하는 요약 리포트를 받아보세요. 주요 지출과 절감 포인트를 한눈에 보여줍니다.</p>
-                        <ul class="grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
-                            <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></span>주간/월간 지출 변화</li>
-                            <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></span>카테고리 TOP 5</li>
-                            <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-amber-500"></span>예산 초과 위험 알림</li>
-                            <li class="flex items-start gap-3"><span class="mt-1 h-2 w-2 rounded-full bg-rose-500"></span>절감 아이디어 제안</li>
-                        </ul>
-                    </div>
-                    <div class="md:w-1/2">
-                        <div class="glass rounded-3xl p-6 shadow border border-white/60 space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.2em] text-indigo-600 font-semibold">Weekly Report</p>
-                                    <p class="text-lg font-bold text-slate-900">2월 2주차 소비 요약</p>
-                                </div>
-                                <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-semibold">AI 추천</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p class="text-xs text-slate-500">지출 총합</p>
-                                    <p class="text-2xl font-black text-rose-600">₩1,320,000</p>
-                                    <p class="text-xs text-rose-500 mt-1">지난주보다 +8%</p>
-                                </div>
-                                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p class="text-xs text-slate-500">절감 가능액</p>
-                                    <p class="text-2xl font-black text-emerald-600">₩210,000</p>
-                                    <p class="text-xs text-emerald-500 mt-1">카드 혜택 최적화</p>
-                                </div>
-                            </div>
-                            <div class="space-y-2 text-sm text-slate-700">
-                                <div class="flex items-start gap-3">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 mt-1"></span>
-                                    <p>식비가 전주 대비 12% 증가했어요. 장보기는 주 1회로 묶고, 카드 할인 요일을 활용해 보세요.</p>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 mt-1"></span>
-                                    <p>대중교통비가 2만원 절감되었습니다. 이동 패턴을 유지하면 월간 목표를 달성할 수 있어요.</p>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-amber-500 mt-1"></span>
-                                    <p>구독 서비스 중 사용하지 않는 항목이 2개 발견되었습니다. 해지 시 월 1.5만원 절약 가능합니다.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <section id="cta" class="relative overflow-hidden card rounded-3xl p-10">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-white/60 rounded-full blur-3xl"></div>
+            <div class="absolute -left-12 -bottom-20 w-80 h-80 bg-indigo-200/50 rounded-full blur-3xl"></div>
+            <div class="relative grid lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-2 space-y-4">
+                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Get Started</p>
+                    <h2 class="text-3xl sm:text-4xl font-black leading-tight">지금 바로 무료로 시작하고,<br class="hidden sm:block">재무 습관을 바꿔 보세요.</h2>
+                    <p class="text-lg text-slate-700">이메일만 입력하면 30초 만에 가입 완료! 언제든지 데이터 가져올 수 있고, 구독은 자유롭게 취소할 수 있습니다.</p>
+                    <form class="flex flex-col sm:flex-row gap-3">
+                        <input type="email" required placeholder="이메일 주소" class="w-full sm:flex-1 px-4 py-3 rounded-xl text-slate-900 soft-border bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/20" />
+                        <button class="px-6 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-lg shadow-slate-300 hover:-translate-y-0.5 transition">초대 링크 받기</button>
+                    </form>
+                    <p class="text-xs text-slate-500">* 초대 링크로 가입하면 프리미엄 기능을 14일 동안 무료로 체험할 수 있습니다.</p>
                 </div>
-            </div>
-        </section>
-
-        <section id="cta" class="max-w-5xl mx-auto px-4 sm:px-6">
-            <div class="relative overflow-hidden rounded-3xl border border-indigo-100 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-2xl">
-                <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -left-10 -bottom-10 w-72 h-72 bg-black/10 rounded-full blur-3xl"></div>
-                <div class="relative p-8 sm:p-12 grid lg:grid-cols-3 gap-8 items-center">
-                    <div class="lg:col-span-2 space-y-4">
-                        <p class="text-sm uppercase tracking-[0.3em] text-white/70 font-semibold">Get Started</p>
-                        <h3 class="text-3xl sm:text-4xl font-black leading-tight">지금 바로 무료로 시작하고,<br class="hidden sm:block">재무 습관을 바꿔 보세요.</h3>
-                        <p class="text-lg text-white/80">이메일만 입력하면 30초 만에 가입 완료! 언제든지 데이터를 가져올 수 있고, 구독은 자유롭게 취소할 수 있습니다.</p>
-                        <form class="flex flex-col sm:flex-row gap-3">
-                            <input type="email" required placeholder="이메일 주소" class="w-full sm:flex-1 px-4 py-3 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-white/70" />
-                            <button class="px-6 py-3 rounded-xl bg-white text-indigo-700 font-semibold shadow-lg hover:-translate-y-0.5 transition">초대 링크 받기</button>
-                        </form>
-                        <p class="text-xs text-white/70">* 초대 링크로 가입하면 프리미엄 기능을 14일 동안 무료로 체험할 수 있습니다.</p>
+                <div class="soft-border rounded-2xl p-6 bg-white/80 shadow-sm backdrop-blur text-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <p class="font-semibold text-slate-800">실시간 알림</p>
+                        <span class="text-xs px-2 py-1 rounded-full bg-slate-900 text-white">모바일 · 웹</span>
                     </div>
-                    <div class="bg-white/10 rounded-2xl p-6 border border-white/30 backdrop-blur text-sm space-y-3">
-                        <div class="flex items-center justify-between">
-                            <p class="font-semibold">실시간 알림</p>
-                            <span class="text-xs bg-white/20 px-2 py-1 rounded-full">모바일 · 웹</span>
-                        </div>
-                        <p class="text-white/80">카드 승인, 계좌 변동, 예산 초과 예상 시 즉시 알려드립니다.</p>
-                        <div class="grid grid-cols-2 gap-3 text-center text-white font-semibold">
-                            <div class="rounded-xl bg-white/15 py-3 border border-white/20">자동 동기화</div>
-                            <div class="rounded-xl bg-white/15 py-3 border border-white/20">보안 암호화</div>
-                            <div class="rounded-xl bg-white/15 py-3 border border-white/20">다국어 지원</div>
-                            <div class="rounded-xl bg-white/15 py-3 border border-white/20">연말정산 PDF</div>
-                        </div>
+                    <p class="text-slate-600">카드 승인, 계좌 변동, 예산 초과 예상 시 즉시 알려드립니다.</p>
+                    <div class="grid grid-cols-2 gap-3 text-center font-semibold text-slate-800">
+                        <div class="rounded-xl bg-slate-50 py-3 soft-border">자동 동기화</div>
+                        <div class="rounded-xl bg-slate-50 py-3 soft-border">보안 암호화</div>
+                        <div class="rounded-xl bg-slate-50 py-3 soft-border">다국어 지원</div>
+                        <div class="rounded-xl bg-slate-50 py-3 soft-border">연말정산 PDF</div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="max-w-6xl mx-auto px-4 sm:px-6 py-12 text-sm text-slate-600">
+    <footer class="max-w-6xl mx-auto px-6 py-12 text-sm text-slate-600">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <p class="text-xs uppercase tracking-[0.24em] text-indigo-600 font-semibold">편리한 가계부</p>
+                <p class="text-[10px] uppercase tracking-[0.24em] text-slate-500 font-semibold">편리한 가계부</p>
                 <p class="font-semibold text-slate-900">매일의 소비를 이해하고 계획하는 가장 쉬운 방법.</p>
             </div>
             <div class="flex items-center gap-4 text-slate-700">
-                <a href="#features" class="hover:text-indigo-700">특징</a>
-                <a href="#workflow" class="hover:text-indigo-700">사용법</a>
-                <a href="#cta" class="hover:text-indigo-700">가입</a>
+                <a href="#features" class="hover:text-slate-900">특징</a>
+                <a href="#workflow" class="hover:text-slate-900">사용법</a>
+                <a href="#cta" class="hover:text-slate-900">가입</a>
             </div>
         </div>
         <p class="mt-6 text-xs text-slate-500">© 2024 Gagyebu. All rights reserved.</p>
